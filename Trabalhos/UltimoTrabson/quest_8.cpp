@@ -1,34 +1,36 @@
-// Definição das constantes
-#define TAMANHO_MAXIMO 100  // Define o tamanho máximo da fila
+#include <stdio.h>
 
-// Função para enfileirar um valor
+// Definiï¿½ï¿½o das constantes
+#define TAMANHO_MAXIMO 100  // Define o tamanho mï¿½ximo da fila
+
+// Funï¿½ï¿½o para enfileirar um valor
 void enfileirar(int fila[], int *fim, int valor) {
-    if (*fim < TAMANHO_MAXIMO - 1) {  // Verifica se a fila não está cheia
-        fila[++(*fim)] = valor;  // Incrementa a posição de fim da fila e adiciona o valor
+    if (*fim < TAMANHO_MAXIMO - 1) {  // Verifica se a fila nï¿½o estï¿½ cheia
+        fila[++(*fim)] = valor;  // Incrementa a posiï¿½ï¿½o de fim da fila e adiciona o valor
     } else {
         printf("Fila cheia.\n");  // Mensagem de erro se a fila estiver cheia
     }
 }
 
-// Função para desenfileirar um valor
+// Funï¿½ï¿½o para desenfileirar um valor
 int desenfileirar(int fila[], int *inicio, int *fim) {
-    if (*inicio <= *fim) {  // Verifica se a fila não está vazia
-        return fila[(*inicio)++];  // Retorna o valor do início da fila e incrementa a posição de início
+    if (*inicio <= *fim) {  // Verifica se a fila nï¿½o estï¿½ vazia
+        return fila[(*inicio)++];  // Retorna o valor do inï¿½cio da fila e incrementa a posiï¿½ï¿½o de inï¿½cio
     } else {
         printf("Fila vazia.\n");  // Mensagem de erro se a fila estiver vazia
         return -1;  // Retorna -1 para indicar erro
     }
 }
 
-// Função para verificar se a fila está vazia
+// Funï¿½ï¿½o para verificar se a fila estï¿½ vazia
 int estaVazia(int inicio, int fim) {
     return inicio > fim;  // Retorna 1 (verdadeiro) se a fila estiver vazia
 }
 
-// Função para inverter a fila usando uma pilha auxiliar
+// Funï¿½ï¿½o para inverter a fila usando uma pilha auxiliar
 void inverterFila(int fila[], int *inicio, int *fim) {
-    int pilhaAuxiliar[TAMANHO_MAXIMO];  // Declaração da pilha auxiliar
-    int topo = -1;  // Inicialização do topo da pilha
+    int pilhaAuxiliar[TAMANHO_MAXIMO];  // Declaraï¿½ï¿½o da pilha auxiliar
+    int topo = -1;  // Inicializaï¿½ï¿½o do topo da pilha
 
     // Transferir elementos da fila para a pilha
     while (!estaVazia(*inicio, *fim)) {
@@ -42,27 +44,27 @@ void inverterFila(int fila[], int *inicio, int *fim) {
         enfileirar(fila, fim, valor);  // Enfileira o valor de volta na fila
     }
 
-    *inicio = 0;  // Reinicializa o índice de início da fila
+    *inicio = 0;  // Reinicializa o ï¿½ndice de inï¿½cio da fila
 }
 
-// Função para imprimir a fila
+// Funï¿½ï¿½o para imprimir a fila
 void imprimirFila(int fila[], int inicio, int fim) {
-    for (int i = inicio; i <= fim; i++) {  // Percorre a fila do início ao fim
+    for (int i = inicio; i <= fim; i++) {  // Percorre a fila do inï¿½cio ao fim
         printf("%d ", fila[i]);  // Imprime cada valor da fila
     }
-    printf("\n");  // Quebra de linha após imprimir a fila
+    printf("\n");  // Quebra de linha apï¿½s imprimir a fila
 }
 
 int main() {
-    int fila[TAMANHO_MAXIMO];  // Declaração da fila
-    int inicio = 0, fim = -1;  // Inicialização dos índices de início e fim da fila
+    int fila[TAMANHO_MAXIMO];  // Declaraï¿½ï¿½o da fila
+    int inicio = 0, fim = -1;  // Inicializaï¿½ï¿½o dos ï¿½ndices de inï¿½cio e fim da fila
     int valor;
 
     // Ler valores para a fila
     printf("Digite valores inteiros positivos (digite um valor negativo para parar):\n");
     while (1) {
         scanf("%d", &valor);
-        if (valor < 0) {  // Verifica se o valor é negativo para parar a entrada de dados
+        if (valor < 0) {  // Verifica se o valor ï¿½ negativo para parar a entrada de dados
             break;  // Sai do loop se o valor for negativo
         }
         enfileirar(fila, &fim, valor);  // Enfileira o valor na fila
@@ -73,7 +75,7 @@ int main() {
     imprimirFila(fila, inicio, fim);  // Imprime a fila original
 
     // Inverter a fila
-    inverterFila(fila, &inicio, &fim);  // Chama a função para inverter a fila
+    inverterFila(fila, &inicio, &fim);  // Chama a funï¿½ï¿½o para inverter a fila
 
     // Imprimir a fila invertida
     printf("Fila invertida:\n");
