@@ -1,0 +1,662 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apresentação - Mineração de Dados de Medicamentos</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .slide-container {
+            max-width: 1000px;
+            width: 100%;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .slide {
+            display: none;
+            padding: 60px;
+            min-height: 600px;
+            animation: slideIn 0.5s ease-in;
+        }
+        
+        .slide.active {
+            display: block;
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .slide h1 {
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 15px;
+        }
+        
+        .slide h2 {
+            color: #764ba2;
+            font-size: 1.8em;
+            margin: 30px 0 20px 0;
+        }
+        
+        .slide h3 {
+            color: #2c3e50;
+            font-size: 1.3em;
+            margin: 20px 0 15px 0;
+        }
+        
+        .slide p {
+            font-size: 1.1em;
+            line-height: 1.6;
+            color: #34495e;
+            margin-bottom: 15px;
+        }
+        
+        .slide ul {
+            margin-left: 30px;
+            margin-bottom: 20px;
+        }
+        
+        .slide li {
+            font-size: 1.1em;
+            line-height: 1.8;
+            color: #34495e;
+            margin-bottom: 10px;
+        }
+        
+        .slide.titulo {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+        }
+        
+        .slide.titulo h1 {
+            color: white;
+            font-size: 3em;
+            border: none;
+            padding: 20px 0;
+        }
+        
+        .slide.titulo p {
+            color: rgba(255,255,255,0.9);
+            font-size: 1.3em;
+            margin-top: 20px;
+        }
+        
+        .slide.titulo .subtitulo {
+            font-size: 1.8em;
+            margin-top: 30px;
+            font-weight: 300;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 60px;
+            background: #f8f9fa;
+            border-top: 1px solid #ddd;
+        }
+        
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s;
+        }
+        
+        button:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .slide-counter {
+            font-weight: bold;
+            color: #667eea;
+            font-size: 1.1em;
+        }
+        
+        .progress-bar {
+            height: 5px;
+            background: #f0f0f0;
+            position: relative;
+        }
+        
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transition: width 0.3s;
+        }
+        
+        .stat-box {
+            display: inline-block;
+            background: #f0f7ff;
+            border-left: 4px solid #667eea;
+            padding: 15px 20px;
+            margin: 10px 0;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+        
+        .highlight {
+            background: #fff3cd;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-weight: 600;
+            color: #856404;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        th {
+            background: #667eea;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+        
+        .cluster-box {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        
+        .cluster-box.c0 {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .cluster-box.c1 {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+        
+        .cluster-box h4 {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+        
+        .cluster-box p {
+            color: white;
+            margin: 5px 0;
+        }
+        
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <div class="progress-bar">
+            <div class="progress" id="progressBar"></div>
+        </div>
+        
+        <!-- SLIDE 1: Título -->
+        <div class="slide titulo active">
+            <h1>🔬 MINERAÇÃO DE DADOS</h1>
+            <p>Dataset de Medicamentos</p>
+            <div class="subtitulo">Análise com K-Means Clustering</div>
+            <p style="margin-top: 50px; font-size: 1.1em;">AV2 - Prática em Mineração de Dados</p>
+        </div>
+        
+        <!-- SLIDE 2: ETL - Introdução -->
+        <div class="slide">
+            <h1>1️⃣ ETL - Extração, Transformação e Carregamento</h1>
+            <h3>Fase 1: Extração de Dados</h3>
+            <p>Carregamento do dataset completo contendo:</p>
+            <ul>
+                <li><span class="highlight">41,547</span> registros de medicamentos</li>
+                <li><span class="highlight">6</span> colunas de atributos</li>
+                <li>Dados em formato CSV</li>
+            </ul>
+            <h3>Desafios Iniciais</h3>
+            <ul>
+                <li>Preços em formato de texto com "R$" e vírgula</li>
+                <li>Quantidade contendo texto "Unidades"</li>
+                <li>Doses misturadas com unidades (mg, UI, etc)</li>
+                <li>Valores faltantes (~30% do dataset)</li>
+            </ul>
+        </div>
+        
+        <!-- SLIDE 3: ETL - Transformação -->
+        <div class="slide">
+            <h1>1️⃣ ETL - Transformação de Dados</h1>
+            <h3>Limpeza e Conversão</h3>
+            <div class="stat-box">
+                ✓ Preço: Removido "R$", convertida vírgula → ponto, transformado em numérico
+            </div>
+            <div class="stat-box">
+                ✓ Quantidade: Removido "Unidades", convertido para números inteiros
+            </div>
+            <div class="stat-box">
+                ✓ Dose: Extraído valor numérico usando regex, removidas unidades
+            </div>
+            <div class="stat-box">
+                ✓ Preços faltantes: Preenchidos com mediana (R$ 93.98)
+            </div>
+            <div class="stat-box">
+                ✓ Quantidades faltantes: Preenchidas com moda
+            </div>
+            <div class="stat-box">
+                ✓ Categorização: Criadas 4 categorias de preço (Baixo/Médio/Alto/Muito Alto)
+            </div>
+            <p style="margin-top: 30px;"><strong>Resultado:</strong> Dataset limpo com 34,606 registros (83.3% de qualidade)</p>
+        </div>
+        
+        <!-- SLIDE 4: Análise Exploratória -->
+        <div class="slide">
+            <h1>2️⃣ Análise Exploratória dos Dados</h1>
+            <h3>Estatísticas Descritivas</h3>
+            <table>
+                <tr>
+                    <th>Métrica</th>
+                    <th>Quantidade</th>
+                    <th>Dose (mg)</th>
+                    <th>Preço (R$)</th>
+                </tr>
+                <tr>
+                    <td><strong>Média</strong></td>
+                    <td>49.72</td>
+                    <td>421073.07</td>
+                    <td>700.06</td>
+                </tr>
+                <tr>
+                    <td><strong>Mediana</strong></td>
+                    <td>30.00</td>
+                    <td>30.00</td>
+                    <td>93.98</td>
+                </tr>
+                <tr>
+                    <td><strong>Mínimo</strong></td>
+                    <td>1.00</td>
+                    <td>0.00</td>
+                    <td>0.00</td>
+                </tr>
+                <tr>
+                    <td><strong>Máximo</strong></td>
+                    <td>6000.00</td>
+                    <td>5000000000.00</td>
+                    <td>1039720.18</td>
+                </tr>
+            </table>
+            <h3>Padrões Iniciais</h3>
+            <ul>
+                <li>5,018 medicamentos na faixa de preço baixo</li>
+                <li>24,838 medicamentos na faixa média</li>
+                <li>169 tipos diferentes de medicamentos</li>
+            </ul>
+        </div>
+        
+        <!-- SLIDE 5: Pré-processamento -->
+        <div class="slide">
+            <h1>3️⃣ Pré-processamento para Clustering</h1>
+            <h3>Seleção de Features</h3>
+            <p>Três variáveis principais selecionadas:</p>
+            <ul>
+                <li><strong>Quantidade:</strong> Número de unidades por embalagem</li>
+                <li><strong>DoseValor:</strong> Dosagem do medicamento em mg</li>
+                <li><strong>Preço_limpo:</strong> Valor em reais (R$)</li>
+            </ul>
+            <h3>Normalização (StandardScaler)</h3>
+            <p>As features possuem escalas diferentes:</p>
+            <ul>
+                <li>Quantidade: 1 a 6.000 unidades</li>
+                <li>Dose: 0.1 a 1.000.000 mg</li>
+                <li>Preço: R$ 0 a R$ 5.000</li>
+            </ul>
+            <p><strong>Solução:</strong> StandardScaler transforma cada feature para média=0 e desvio padrão=1, evitando que variáveis com magnitudes maiores dominem o clustering.</p>
+        </div>
+        
+        <!-- SLIDE 6: K-Means Algoritmo -->
+        <div class="slide">
+            <h1>4️⃣ K-Means Clustering - Algoritmo</h1>
+            <h3>Elbow Method</h3>
+            <p>Técnica para encontrar o número ótimo de clusters avaliando a inércia (soma das distâncias dos pontos aos centroides).</p>
+            <h3>Silhueta Score</h3>
+            <p>Métrica que mede a qualidade do clustering:</p>
+            <ul>
+                <li><strong>Intervalo:</strong> -1 a +1</li>
+                <li><strong>Próximo a +1:</strong> Clusters bem separados e densos</li>
+                <li><strong>Próximo a 0:</strong> Clusters sobrepostos</li>
+                <li><strong>Próximo a -1:</strong> Pontos em clusters errados</li>
+            </ul>
+            <h3>Resultado da Análise</h3>
+            <p><span class="highlight">K ótimo = 2</span></p>
+            <p>Silhueta Score: <span class="highlight">0.995</span> (Excelente!)</p>
+        </div>
+        
+        <!-- SLIDE 7: Resultados do Clustering -->
+        <div class="slide">
+            <h1>4️⃣ K-Means - Resultados</h1>
+            <h3>Clusters Identificados</h3>
+
+            <div class="cluster-box c0">
+                <h4>Cluster 0: 34,604 medicamentos (100.0%)</h4>
+                <p><strong>Preço:</strong> R$ 0.00 - R$ 1039720.18 (Média: R$ 700.10)</p>
+                <p><strong>Dose:</strong> 0.00mg - 2000000000.00mg (Média: 161011.87mg)</p>
+                <p><strong>Quantidade:</strong> Média de 50 unidades por embalagem</p>
+            </div>
+
+            <div class="cluster-box c1">
+                <h4>Cluster 1: 2 medicamentos (0.0%)</h4>
+                <p><strong>Preço:</strong> R$ 93.98 - R$ 93.98 (Média: R$ 93.98)</p>
+                <p><strong>Dose:</strong> 4000000000.00mg - 5000000000.00mg (Média: 4500000000.00mg)</p>
+                <p><strong>Quantidade:</strong> Média de 20 unidades por embalagem</p>
+            </div>
+
+        </div>
+        
+        <!-- SLIDE 8: Visualizações -->
+        <div class="slide">
+            <h1>5️⃣ Visualizações - Seis Gráficos Analíticos</h1>
+            <img src="graficos_relatorio.png" alt="Gráficos de Análise">
+            <p style="text-align: center; margin-top: 20px; font-size: 0.95em;">
+                Gráficos 1-2: Determinação de K ótimo | Gráfico 3: Boxplot de preços | 
+                Gráficos 4-5: Relações entre variáveis | Gráfico 6: Distribuição por cluster
+            </p>
+        </div>
+        
+        <!-- SLIDE 9: Interpretação Cluster 0 -->
+        <div class="slide">
+            <h1>6️⃣ Interpretação - Cluster 0</h1>
+
+            <h3>Medicamentos Económicos e Acessíveis</h3>
+            <ul>
+                <li><strong>Tamanho:</strong> 34,604 medicamentos (100.0%)</li>
+                <li><strong>Intervalo de Preço:</strong> R$ 0.00 a R$ 1039720.18</li>
+                <li><strong>Preço Médio:</strong> R$ 700.10</li>
+                <li><strong>Doses:</strong> 0.00mg a 2000000000.00mg (Média: 161011.87mg)</li>
+                <li><strong>Quantidade Média:</strong> 50 unidades</li>
+            </ul>
+            <h3>Características</h3>
+            <p>Este cluster representa medicamentos populares, genéricos e acessíveis. São produtos de uso comum com preços baixos e doses variadas. Representa a maior parte do mercado e é alvo de políticas de saúde pública.</p>
+            <h3>Tipos Principais</h3>
+            <p>Comprimido revestido (10273), Comprimido (6540), Solução injetável (3779)</p>
+        </div>
+
+        <!-- SLIDE 10: Interpretação Cluster 1 -->
+        <div class="slide">
+            <h1>6️⃣ Interpretação - Cluster 1</h1>
+            <h3>Medicamentos Premium e Especializados</h3>
+            <ul>
+                <li><strong>Tamanho:</strong> 2 medicamentos (0.0%)</li>
+                <li><strong>Intervalo de Preço:</strong> R$ 93.98 a R$ 93.98</li>
+                <li><strong>Preço Médio:</strong> R$ 93.98</li>
+                <li><strong>Doses:</strong> 4000000000.00mg a 5000000000.00mg (Média: 4500000000.00mg)</li>
+                <li><strong>Quantidade Média:</strong> 20 unidades</li>
+            </ul>
+            <h3>Características</h3>
+            <p>Este cluster representa medicamentos de alto custo, alta potência ou especializações. São produtos premium, medicamentos injetáveis, biológicos ou tratamentos específicos. Representa um nicho menor mas estratégico do mercado.</p>
+            <h3>Tipos Principais</h3>
+            <p>Comprimido mastigável (1), Suspensão oral (1)</p>
+        </div>
+
+        <!-- SLIDE 11: Correlações -->
+        <div class="slide">
+            <h1>7️⃣ Regras de Associação - Correlações</h1>
+            <h3>Matriz de Correlação</h3>
+            <table>
+                <tr>
+                    <th>Atributo</th>
+                    <th>Quantidade</th>
+                    <th>Dose</th>
+                    <th>Preço</th>
+                </tr>
+
+                <tr>
+                    <td><strong>Quantidade</strong></td>
+                    <td>1.000</td>
+                    <td>-0.003</td>
+                    <td>0.070</td>
+                </tr>
+
+                <tr>
+                    <td><strong>Dose</strong></td>
+                    <td>-0.003</td>
+                    <td>1.000</td>
+                    <td>-0.001</td>
+                </tr>
+
+                <tr>
+                    <td><strong>Preço</strong></td>
+                    <td>0.070</td>
+                    <td>-0.001</td>
+                    <td>1.000</td>
+                </tr>
+
+            </table>
+            <h3>Interpretação</h3>
+            <ul>
+                <li><strong>Preço vs Dose (-0.001):</strong> Correlação fraca - dose não determina preço</li>
+                <li><strong>Preço vs Quantidade (0.070):</strong> Quantidade e preço são relativamente independentes</li>
+                <li><strong>Padrão Geral:</strong> O preço é mais influenciado pelo tipo e especialidade do medicamento do que pela dose ou quantidade</li>
+            </ul>
+        </div>
+        
+        <!-- SLIDE 12: Padrões Descobertos -->
+        <div class="slide">
+            <h1>7️⃣ Padrões Descobertos</h1>
+            <h3>Padrão 1: Segmentação de Mercado</h3>
+            <p>Identificada clara segmentação entre medicamentos populares (Cluster 0) e especializados (Cluster 1).</p>
+            
+            <h3>Padrão 2: Distribuição Assimétrica</h3>
+            <p>Grande concentração em Cluster 0 (100.0% dos medicamentos) reflete o mercado de genéricos.</p>
+            
+            <h3>Padrão 3: Independência de Variáveis</h3>
+            <p>Dose e quantidade por embalagem não determinam o preço - indicando que o valor é baseado em outras características (princípio ativo, eficácia, etc).</p>
+            
+            <h3>Padrão 4: Nichos Bem Definidos</h3>
+            <p>Os clusters revelam dois nichos de mercado distintos com características econômicas e estruturais bem separadas.</p>
+            
+            <h3>Padrão 5: Viabilidade Clínica</h3>
+            <p>Cluster 0 domina porque medicamentos básicos e genéricos são mais numerosos e acessíveis.</p>
+        </div>
+        
+        <!-- SLIDE 13: Conclusões -->
+        <div class="slide">
+            <h1>8️⃣ Conclusões e Recomendações</h1>
+            <h3>Achados Principais</h3>
+            <ul>
+                <li><strong>✓ Segmentação Efetiva:</strong> K-Means identificou 2 clusters bem definidos e separados</li>
+                <li><strong>✓ Qualidade Validada:</strong> Silhueta Score de 0.995 confirma excelente clustering</li>
+                <li><strong>✓ Mercado Polarizado:</strong> 99%+ medicamentos baratos vs <1% premium</li>
+                <li><strong>✓ Fatores Determinantes:</strong> Tipo de medicamento > dose/quantidade</li>
+            </ul>
+            <h3>Aplicações Práticas</h3>
+            <ul>
+                <li>📊 Estratégias de marketing direcionadas por cluster</li>
+                <li>📦 Otimização de estoque e logística</li>
+                <li>🎯 Análise competitiva e posicionamento</li>
+                <li>📈 Previsão de demanda por segmento</li>
+                <li>💊 Políticas de saúde pública para cada segmento</li>
+            </ul>
+        </div>
+        
+        <!-- SLIDE 14: Resumo Técnico -->
+        <div class="slide">
+            <h1>9️⃣ Resumo Técnico</h1>
+            <h3>Estatísticas do Projeto</h3>
+            <div class="stat-box">Volume de Dados: 41,547 registros totais</div>
+            <div class="stat-box">Qualidade: 83.3% de dados válidos</div>
+            <div class="stat-box">Algoritmo: K-Means com k=2 clusters</div>
+            <div class="stat-box">Features: 3 dimensões normalizadas (StandardScaler)</div>
+            <div class="stat-box">Métrica: Silhueta Score = 0.995</div>
+            <div class="stat-box">Validação: Elbow Method + Análise de Silhueta</div>
+            <h3>Ferramentas Utilizadas</h3>
+            <ul>
+                <li><strong>Linguagem:</strong> Python 3.x</li>
+                <li><strong>Manipulação:</strong> Pandas, NumPy</li>
+                <li><strong>ML:</strong> Scikit-learn (KMeans, StandardScaler)</li>
+                <li><strong>Visualização:</strong> Matplotlib, Seaborn</li>
+                <li><strong>Relatório:</strong> ReportLab (PDF), HTML5</li>
+            </ul>
+        </div>
+        
+        <!-- SLIDE 15: Próximos Passos -->
+        <div class="slide">
+            <h1>🔟 Próximos Passos e Expansões</h1>
+            <h3>Análises Futuras Recomendadas</h3>
+            <ul>
+                <li><strong>Clustering Hierárquico:</strong> Explorar relações entre medicamentos em diferentes níveis de granularidade</li>
+                <li><strong>Análise de Princípios Ativos:</strong> Agrupar medicamentos por indicação terapêutica</li>
+                <li><strong>Série Temporal:</strong> Analisar evolução de preços ao longo do tempo</li>
+                <li><strong>Análise de Demanda:</strong> Integrar dados de vendas com características dos medicamentos</li>
+                <li><strong>Regras de Associação Apriori:</strong> Identificar medicamentos frequentemente comprados juntos</li>
+            </ul>
+            <h3>Otimizações Possíveis</h3>
+            <ul>
+                <li>🔍 Incluir variáveis categóricas (tipo, fabricante)</li>
+                <li>📊 Aplicar redução dimensional (PCA)</li>
+                <li>🎯 Testar outros algoritmos (DBSCAN, Gaussian Mixture)</li>
+                <li>📈 Análise de influenciadores de preço (regressão)</li>
+            </ul>
+        </div>
+        
+        <!-- SLIDE 16: Referências -->
+        <div class="slide">
+            <h1>📚 Referências e Metodologia</h1>
+            <h3>Algoritmo K-Means</h3>
+            <p>Algoritmo de clustering não-supervisionado que particiona dados em k clusters, minimizando a inércia (variância intra-cluster). Baseado em iterações que atualizam centroides.</p>
+            
+            <h3>Validação de Clustering</h3>
+            <ul>
+                <li><strong>Elbow Method:</strong> Identifica "cotovelo" na curva de inércia</li>
+                <li><strong>Silhueta Score:</strong> Mede separação e coesão de clusters</li>
+                <li><strong>Davies-Bouldin Index:</strong> (Recomendado para análises futuras)</li>
+            </ul>
+            
+            <h3>Normalização</h3>
+            <p><strong>StandardScaler:</strong> Transforma features para média=0, desvio=1. Essencial para algoritmos baseados em distância.</p>
+            
+            <h3>Fontes e Dados</h3>
+            <ul>
+                <li>Dataset: medications_details_complete.csv</li>
+                <li>Período: Análise estática (snapshot)</li>
+                <li>Cobertura: 41,547 medicamentos brasileiros</li>
+            </ul>
+        </div>
+        
+        <!-- SLIDE 17: Agradecimentos -->
+        <div class="slide titulo">
+            <h1>✨ FIM DA APRESENTAÇÃO</h1>
+            <p style="font-size: 1.3em; margin-top: 50px;">Obrigado por acompanhar!</p>
+            <p style="margin-top: 30px; font-size: 1.1em;">
+                <strong>Documentos Gerados:</strong><br>
+                📄 Relatório PDF Completo<br>
+                🎯 Apresentação HTML Interativa
+            </p>
+            <p style="margin-top: 40px; font-size: 0.95em; opacity: 0.9;">
+                Mineração de Dados - AV2<br>
+                Análise realizada em 13/11/2025
+            </p>
+        </div>
+        
+        <!-- Controles -->
+        <div class="controls">
+            <button id="prevBtn" onclick="changeSlide(-1)">← Anterior</button>
+            <span class="slide-counter">
+                <span id="currentSlide">1</span> / <span id="totalSlides">17</span>
+            </span>
+            <button id="nextBtn" onclick="changeSlide(1)">Próximo →</button>
+        </div>
+    </div>
+    
+    <script>
+        let currentSlide = 1;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        
+        function showSlide(n) {
+            slides.forEach(slide => slide.classList.remove('active'));
+            
+            if (n > totalSlides) currentSlide = totalSlides;
+            if (n < 1) currentSlide = 1;
+            
+            slides[currentSlide - 1].classList.add('active');
+            
+            document.getElementById('currentSlide').textContent = currentSlide;
+            document.getElementById('totalSlides').textContent = totalSlides;
+            
+            // Atualizar barra de progresso
+            const progress = (currentSlide / totalSlides) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+            
+            // Desabilitar botões nas extremidades
+            document.getElementById('prevBtn').disabled = currentSlide === 1;
+            document.getElementById('nextBtn').disabled = currentSlide === totalSlides;
+        }
+        
+        function changeSlide(n) {
+            currentSlide += n;
+            showSlide(currentSlide);
+        }
+        
+        // Navegação por teclado
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') changeSlide(-1);
+            if (e.key === 'ArrowRight') changeSlide(1);
+        });
+        
+        // Inicializar
+        showSlide(currentSlide);
+        document.getElementById('totalSlides').textContent = totalSlides;
+    </script>
+</body>
+</html>

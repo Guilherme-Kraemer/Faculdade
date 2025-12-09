@@ -1,7 +1,0 @@
-numero_total = int(input("Escreva o número de eleitores, deste município:"))
-numero_validos = int(input("Escreva o número de votos válidos:"))
-numero_brancos = int(input("Escreva o número de votos brancos:"))
-numero_nulos = int(input(" Escreva o número de votos nulos:"))
-print("A porcentagem de votos válidos é : ",(numero_validos/numero_total)*100)
-print("A porcentagem de votos brancos é: ", (numero_brancos/numero_total)*100)
-print("A porcentagem de votos nulos é: ", (numero_nulos/numero_total)*100)
